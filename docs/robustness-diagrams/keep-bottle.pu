@@ -1,0 +1,71 @@
+@startuml
+
+title ボトルをキープする
+
+
+skinparam usecase {
+  BackgroundColor<< Step3 >> LightGrey
+}
+
+
+actor customer as customer_actor
+
+note right
+[基本コース]
+1. customer は「keepする」ボタンを押す
+2. システムはボトル撮影画面を表示する
+3. customer は名前を書いたボトルの写真を撮る
+4. システムは写真をメモリー上に保存して、位置情報を取得し、近い順に最大n件の restaurant 一覧を検索し、 restaurant選択画面に表示する
+5. customer は restaurant 一覧から自分の居る restaurant を選択する
+6. システムは kept_bottle と restaurant と時刻を登録し、完了画面を表示する
+
+[代替コース]
+2-a. システムは、ログインしていない場合はログイン画面を表示する
+4-a. 位置情報が取得できない場合、「位置情報が取得できません」エラーメッセージを表示する
+5-a. customer は、自分の居る restaurant が restaurant 一覧にない場合は restaurant 追加ボタンを押す
+5-a'. システムは、 restaurant 追加画面を表示する
+end note
+
+boundary トップ画面 as top_page
+boundary ログイン画面 as login_page #lightgray;line:gray
+boundary ボトル撮影画面 as take_photo_page
+boundary "restaurant 選択画面" as restaurant_selection_page
+boundary 完了画面 as complete_page
+control ログインする as login #lightgray;line:gray
+control "ログイン状態か？" as check_login
+control 写真をメモリー上に保存する as save_photo
+control "位置情報を取得できるか？" as check_gps
+control エラーメッセージを表示する as show_error #lightgray;line:gray
+control "近隣の restaurant 一覧を検索する" as search_restaurant
+control "kept_bottle を登録する" as save_kept_bottle
+entity customer
+entity restaurant
+entity kept_bottle
+usecase (restaurant を追加する) as add_restaurant #lightgray;line:gray
+
+' 基本コース
+customer_actor -right-> top_page
+top_page -right-> check_login
+check_login -right-> customer
+check_login -right-> take_photo_page : はい
+take_photo_page -right-> save_photo : 写真を撮る
+save_photo -right-> check_gps
+check_gps -right-> search_restaurant : はい
+search_restaurant -right-> restaurant
+search_restaurant --> restaurant_selection_page
+restaurant_selection_page --> save_kept_bottle : "restaurant を選択する"
+save_kept_bottle --> kept_bottle
+save_kept_bottle --> complete_page
+
+' 代替コース
+check_login -down-> login_page #line:gray : いいえ
+login_page -down-> login #line:gray
+login --> customer #line:gray
+login --> take_photo_page #line:gray
+check_gps --> show_error #line:gray : いいえ
+show_error --> restaurant_selection_page
+restaurant_selection_page -right-> add_restaurant #line:gray : "restaurant がない場合追加ボタンを押す"
+
+
+
+@enduml

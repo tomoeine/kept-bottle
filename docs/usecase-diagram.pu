@@ -1,0 +1,29 @@
+@startuml
+
+title ボトルキープ ユースケース図
+
+left to right direction
+
+actor customer
+actor restaurant_owner
+actor administrator
+
+usecase (restaurant を登録する) as register_restaurant
+
+customer --> (ログインする)
+customer --> (退会する)
+customer --> (アカウントを登録する)
+customer --> (アカウントを更新する)
+customer --> (ボトルをキープする)
+customer --> (キープしたボトルを空ける)
+customer --> (kept_bottle の写真を更新する)
+customer --> (kept_bottle の restaurant を修正する)
+customer --> (自分の kept_bottle 一覧を見る)
+customer --> register_restaurant
+restaurant_owner -- (restaurant の管理者として申請する)
+restaurant_owner -- (お店の kept_bottle 一覧を見る)
+restaurant_owner -- (kept_bottle を捨てる)
+restaurant_owner --> register_restaurant
+administrator -- (restaurant の管理者を承認する)
+
+@enduml

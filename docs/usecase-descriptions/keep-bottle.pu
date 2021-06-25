@@ -1,0 +1,21 @@
+@startuml
+
+title ボトルをキープする
+
+note left
+[基本コース]
+1. customer は「keepする」ボタンを押す
+2. システムはボトル撮影画面を表示する
+3. customer は名前を書いたボトルの写真を撮る
+4. システムは写真をメモリー上に保存して、位置情報を取得し、近い順に最大n件の restaurant 一覧を検索し、 restaurant選択画面に表示する
+5. customer は restaurant 一覧から自分の居る restaurant を選択する
+6. システムは kept_bottle と restaurant と時刻を登録し、完了画面を表示する
+
+[代替コース]
+2-a. システムは、ログインしていない場合はログイン画面を表示する
+4-a. 位置情報が取得できない場合、「位置情報が取得できません」エラーメッセージを表示する
+5-a. customer は、自分の居る restaurant が restaurant 一覧にない場合は restaurant 追加ボタンを押す
+5-a'. システムは、 restaurant 追加画面を表示する
+end note
+
+@enduml

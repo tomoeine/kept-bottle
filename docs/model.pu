@@ -1,0 +1,35 @@
+@startuml
+
+class restaurant {
+  name: String
+  latitude: Double
+  longitude: Double
+}
+
+class restaurant_owner {
+  restaurant: Restaurant
+}
+
+class customer {
+  name: String
+  email: String
+  password: String
+}
+
+class kept_bottle {
+  photo: Photo
+  created_at: Timestamp
+  restaurant: Restaurant
+  customer: Customer
+  status: BottleKeepStatus
+}
+
+class administrator {
+
+}
+
+restaurant o-- restaurant_owner
+kept_bottle --o restaurant
+kept_bottle --o customer
+
+@enduml
