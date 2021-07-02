@@ -1,0 +1,181 @@
+openapi: 3.0.2
+info:
+  title: "kept-bottle"
+  version: "0.1"
+  contact:
+    name: "kept-bottle"
+servers:
+  - url: "http://localhost"
+    description: "Local"
+
+paths:
+  "/api/auth/customer/login":
+    post:
+      summary: "ログイン"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  title: メールアドレス
+                  type: string
+                  format: email
+                  example: customer01@example.com
+                password:
+                  title: パスワード
+                  type: string
+                  example: password
+      responses:
+        200:
+          description: "認証情報"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticationInformation"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+  "/api/restaurants/search":
+    get:
+      summary: "レストラン検索"
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - longitude
+                - latitude
+              properties:
+                longitude:
+                  title: 緯度
+                  type: number
+                  example: 31.9165262
+                latitude:
+                  title: 経度
+                  type: number
+                  example: 131.4211783
+      responses:
+        200:
+          description: "レストラン一覧"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Restaurant"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+  "/api/kept-bottle":
+    post:
+      summary: "ボトルをキープする"
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - restaurant_id
+                - customer_id
+                - photo_url
+              properties:
+                restaurant_id:
+                  title: レストランID
+                  type: integer
+                  example: 1
+                customer_id:
+                  title: カスタマーID
+                  type: integer
+                  example: 1
+                photo_url:
+                  title: 写真のURL
+                  type: string
+                  example: https://example.com/image.jpg
+      responses:
+        201:
+          description: "kept-bottle の登録完了"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    AuthenticationInformation:
+      type: object
+      properties:
+        access_token:
+          title: アクセストークン
+          type: string
+          example: "token_example"
+        token_type:
+          title: トークンタイプ
+          type: string
+          example: "token_type"
+        expires_in:
+          title: 有効期限
+          type: number
+          example: 604800
+    Restaurant:
+      type: object
+      properties:
+        name:
+          title: 店名
+          type: string
+          example: "もも鐵 えん"
+        longitude:
+          title: 緯度
+          type: number
+          example: 31.9165262
+        latitude:
+          title: 経度
+          type: number
+          example: 131.4211783
+
+  responses:
+    Created:
+      description: "リソース生成完了"
+    NoContent:
+      description: "リクエスト成功（レスポンスボディ無し）"
+    Unauthorized:
+      description: "認証エラー"
+    Forbidden:
+      description: "権限エラー"
+    NotFound:
+      description: "未検出エラー"
+    Conflict:
+      description: "競合エラー"
+    ValidationError:
+      description: "バリデーションエラー"
+      content:
+        application/json:
+          schema:
+            description: "エラー"
+            type: object
+            required:
+              - message
+            properties:
+              message:
+                title: "エラーメッセージ"
+                type: string
+                example: "バリデーションエラー"
+    InternalServerError:
+      description: "サーバの内部エラー"
+

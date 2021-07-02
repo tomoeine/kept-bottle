@@ -69,3 +69,12 @@ services:
       - MYSQL_USER=${DB_USER:-phper}
       - MYSQL_PASSWORD=${DB_PASS:-secret}
       - MYSQL_ROOT_PASSWORD=${DB_PASS:-secret}
+
+  doc-api:
+    image: swaggerapi/swagger-ui
+    ports:
+      - ${DOC_API_PORT:-8080}:8080
+    volumes:
+      - ./docs/openapi.yaml:/openapi.yaml:ro
+    environment:
+      SWAGGER_JSON: /openapi.yaml
