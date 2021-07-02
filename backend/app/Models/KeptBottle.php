@@ -16,6 +16,8 @@ class KeptBottle extends Model
      * @var array
      */
     protected $fillable = [
+        'restaurant_id',
+        'customer_id',
         'photo_url',
         'status',
     ];

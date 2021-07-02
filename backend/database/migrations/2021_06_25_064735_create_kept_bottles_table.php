@@ -18,6 +18,7 @@ class CreateKeptBottlesTable extends Migration
             $table->unsignedBigInteger('restaurant_id');
             $table->unsignedBigInteger('customer_id');
             $table->string('photo_url');
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
 
             $table->foreign('restaurant_id')->references('id')->on('restaurants')->onDelete('cascade');
