@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         if (!App::environment() !== 'production') {
             $this->call([
                 develop\CustomersTableSeeder::class,
+                develop\RestaurantsTableSeeder::class,
             ]);
         }
     }
