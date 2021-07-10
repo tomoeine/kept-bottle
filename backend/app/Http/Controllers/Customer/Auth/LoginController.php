@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use AuthorizesRequests;
+    use DispatchesJobs;
+    use ValidatesRequests;
 
     public function guard()
     {
