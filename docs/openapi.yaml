@@ -46,23 +46,21 @@ paths:
       summary: "レストラン検索"
       security:
         - bearerAuth: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - longitude
-                - latitude
-              properties:
-                longitude:
-                  title: 緯度
-                  type: number
-                  example: 31.9165262
-                latitude:
-                  title: 経度
-                  type: number
-                  example: 131.4211783
+      parameters:
+        - in: query
+          name: longitude
+          title: 緯度
+          required: true
+          schema:
+            type: number
+          example: 31.9165262
+        - in: query
+          name: latitude
+          title: 経度
+          required: true
+          schema:
+            type: number
+          example: 131.4211783
       responses:
         200:
           description: "レストラン一覧"
