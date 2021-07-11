@@ -20,7 +20,7 @@ Route::name('auth.')->prefix('auth')->middleware(['guest'])->group(function () {
 
 
 Route::name('customer.')->middleware(['auth:customers'])->group(function () {
-    Route::prefix('restaurant')->name('restaurant.')->group(function () {
+    Route::prefix('restaurants')->name('restaurants.')->group(function () {
         Route::get('search', \App\Http\Controllers\Customer\Restaurant\SearchController::class)->name('search');
     });
 

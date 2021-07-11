@@ -31,6 +31,6 @@ class CreateRestaurantOwnersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('restaurant_owners');
     }
 }

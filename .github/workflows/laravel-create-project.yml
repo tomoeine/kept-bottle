@@ -16,9 +16,7 @@ jobs:
         run: docker-compose --version
 
       - name: Build Docker
-        run: |
-          mkdir backend
-          docker-compose up -d --build
+        run: docker-compose up -d --build
 
       - name: PHP Version
         run: docker-compose exec -T app php --version
@@ -26,8 +24,13 @@ jobs:
       - name: Composer Version
         run: docker-compose exec -T app composer --version
 
-      - name: Create Laravel Project
-        run: docker-compose exec -T app composer create-project --prefer-dist laravel/laravel .
+      - name: Composer Install
+        run: docker-compose exec -T app composer install
+
+      - name: Laravel Settings
+        run: |
+          docker-compose exec -T app cp .env.example .env
+          docker-compose exec -T app php artisan key:generate
 
       - name: Laravel Version
         run: docker-compose exec -T app php artisan --version
@@ -43,3 +46,6 @@ jobs:
 
       - name: Laravel PHPUnit Testing
         run: docker-compose exec -T app php artisan test
+
+      - name: Laravel PHPCS Testing
+        run: docker-compose exec -T app composer phpcs
